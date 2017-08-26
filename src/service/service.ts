@@ -6,7 +6,7 @@ import Salary2020 from './salary2020.service';
 class Services {
 
   private axios = Axios;
-  private baseUrl = "http://192.168.102.133:8080/pensions_api/api/";
+  private baseUrl = "http://192.168.100.165:8080/pms_masterdata_api/api/";
 
   presentages: Presentages;
   salary2020: Salary2020;

@@ -64,6 +64,16 @@ export function netGratuityCalculation(grossGratuity : number, govDeduction : nu
 }
 
 /*
+* calculate revised net gratuity
+* @param oldGrossGratuity, newGrossGratuity, govDeduction
+*/
+export function revisedNetGratuityCalculation(oldGrossGratuity : number, newGrossGratuity : number, govDeduction : number) {
+    //let netGratuity = newGrossGratuity - (oldGrossGratuity + +govDeduction);
+    let netGratuity = newGrossGratuity - oldGrossGratuity;
+    return netGratuity;
+}
+
+/*
 * calculate total service period
 * @param trainedPeriod, wnodDeductionPeriod, pensionablePeriod
 */
@@ -118,6 +128,69 @@ export function netNoPayLeaveCalculation (noPayLeave : Duration, noPaySetOff : D
     netNoPay.days = Math.floor((netNoPayDays % 360) % 30);
 
     return netNoPay;
+}
+
+/*
+* calculate total nopay set off
+* @param governmentSetOff, foreignSetOff, governmentSetOffMore
+*/
+export function netNoPaySetOffCalculation(governmentSetOff : Duration, foreignSetOff : Duration, governmentSetOffMore : Duration){
+    var governmentSetOffYY = governmentSetOff.years;
+    var governmentSetOffMM = governmentSetOff.months;
+    var governmentSetOffDD = governmentSetOff.days;
+
+    var foreignSetOffYY = foreignSetOff.years;
+    var foreignSetOffMM = foreignSetOff.months;
+    var foreignSetOffDD = foreignSetOff.days;
+
+    var governmentSetOffMoreYY = governmentSetOffMore.years;
+    var governmentSetOffMoreMM = governmentSetOffMore.months;
+    var governmentSetOffMoreDD = governmentSetOffMore.days;
+
+    var governmentSetOffDays = (governmentSetOffYY * 12 * 30) + +(governmentSetOffMM * 30) + +governmentSetOffDD;
+    var foreignSetOffDays = (foreignSetOffYY * 12 * 30) + +(foreignSetOffMM * 30) + +foreignSetOffDD;
+    var governmentSetOffMoreDays = (governmentSetOffMoreYY * 12 * 30) + +(governmentSetOffMoreMM * 30) + +governmentSetOffMoreDD;
+
+    var netNoPaySetoff = governmentSetOffDays + +foreignSetOffDays + +governmentSetOffMoreDays;
+    var setOffPeriod = new Duration();
+
+    setOffPeriod.years = Math.floor(netNoPaySetoff / 360);
+    setOffPeriod.months = Math.floor((netNoPaySetoff % 360) / 30);
+    setOffPeriod.days = Math.floor((netNoPaySetoff % 360) % 30);
+
+    return setOffPeriod;
+}
+
+/*
+* calculate deductable percentage 1% for every 6 months
+* @param serviceYears, serviceMonths
+*/
+export function deductablePercentageCalculation(serviceYears: number, serviceMonths: number) {
+    let deductablePercentage = 0;
+
+    if (serviceYears < 25) {
+
+        if (serviceMonths < 6) {
+            deductablePercentage = (25 - serviceYears) * 2;
+        }
+        else {
+            deductablePercentage = (25 - (serviceYears + +0.5)) * 2;
+        }
+        return deductablePercentage;
+    }
+    else {
+        return deductablePercentage;
+    }
+}
+
+/*
+* calculate net percentage after deduct
+* @param percentage, deductablePercentage, noPayPercentage
+*/
+export function netPercentageCalculation(percentage: number, deductablePercentage: number, noPayPercentage: number) {
+    let netPercentage = percentage - (deductablePercentage + +noPayPercentage);
+    return netPercentage;
+
 }
 
 class Duration {
