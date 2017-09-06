@@ -68,8 +68,7 @@ export function netGratuityCalculation(grossGratuity : number, govDeduction : nu
 * @param oldGrossGratuity, newGrossGratuity, govDeduction
 */
 export function revisedNetGratuityCalculation(oldGrossGratuity : number, newGrossGratuity : number, govDeduction : number) {
-    //let netGratuity = newGrossGratuity - (oldGrossGratuity + +govDeduction);
-    let netGratuity = newGrossGratuity - oldGrossGratuity;
+    let netGratuity = newGrossGratuity - (oldGrossGratuity + +govDeduction);
     return netGratuity;
 }
 
