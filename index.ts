@@ -5,16 +5,16 @@ import service from './src/service/service';
 * get reduced unredeced precentages
 * @param type, years, months,circular, salary
 */
-export function getPrecentage(type : string, years : number, months : number, circular : string, salary : number){
-  var presentageObject = service.presentages.getPresentages(type, years, months, circular, salary);
-  return presentageObject;
+export function getPrecentage(type: string, years: number, months: number, circular: string, salary: number) {
+    var presentageObject = service.presentages.getPresentages(type, years, months, circular, salary);
+    return presentageObject;
 }
 
 /*
 * get 2020 salary and increment values
 * @parms scale, grade, circular, salary, retired_date, increment_date
 */
-export function get2020Salary(scale : string, grade : string, circular : string, salary : number, retired_date : string, increment_date : string){
+export function get2020Salary(scale: string, grade: string, circular: string, salary: number, retired_date: string, increment_date: string) {
     var salaryObject = service.salary2020.get2020Salary(scale, grade, circular, salary, retired_date, increment_date)
     return salaryObject;
 }
@@ -22,8 +22,8 @@ export function get2020Salary(scale : string, grade : string, circular : string,
 * calculate annual consolidate salary and annual consolidate salary in 2020
 * @param basicSalary  
 */
-export function annualSalaryCalculation(basicSalary : number) {
-    let annualSalary =  basicSalary * 12;
+export function annualSalaryCalculation(basicSalary: number) {
+    let annualSalary = basicSalary * 12;
     return annualSalary;
 }
 
@@ -31,7 +31,7 @@ export function annualSalaryCalculation(basicSalary : number) {
 * calculate gross salary both current and 2020
 * @param basicSalary, increment, allowance
 */
-export function grossSalaryCalculation(basicSalary : number, increment : number, allowance : number) {
+export function grossSalaryCalculation(basicSalary: number, increment: number, allowance: number) {
     let grossSalary = (basicSalary * 12) + +increment + +allowance;
     return grossSalary;
 }
@@ -40,8 +40,8 @@ export function grossSalaryCalculation(basicSalary : number, increment : number,
 * calculate reduced and unreduced pension both current and 2020
 * @params grossSalary, precentage
 */
-export function reducedUnreducedCalculation(grossSalary : number, precentage : number) { 
-    let reducedUnreduced = ( (grossSalary * precentage) / 100 ) / 12;
+export function reducedUnreducedCalculation(grossSalary: number, precentage: number) {
+    let reducedUnreduced = ((grossSalary * precentage) / 100) / 12;
     return reducedUnreduced;
 }
 
@@ -49,8 +49,8 @@ export function reducedUnreducedCalculation(grossSalary : number, precentage : n
 * calculate gross gratuity
 * @param grossSalary, unreducedPrecentage
 */
-export function grossGratuityCalculation(grossSalary : number, unreducedPrecentage : number) {
-    let grossGratuity =  ( (grossSalary * unreducedPrecentage) / 100 ) * 2;
+export function grossGratuityCalculation(grossSalary: number, unreducedPrecentage: number) {
+    let grossGratuity = ((grossSalary * unreducedPrecentage) / 100) * 2;
     return grossGratuity;
 }
 
@@ -58,7 +58,7 @@ export function grossGratuityCalculation(grossSalary : number, unreducedPrecenta
 * calculate net gratuity
 * @param grossGratuity, govDeduction
 */
-export function netGratuityCalculation(grossGratuity : number, govDeduction : number) {
+export function netGratuityCalculation(grossGratuity: number, govDeduction: number) {
     let netGratuity = grossGratuity - govDeduction;
     return netGratuity;
 }
@@ -67,7 +67,7 @@ export function netGratuityCalculation(grossGratuity : number, govDeduction : nu
 * calculate revised net gratuity
 * @param oldGrossGratuity, newGrossGratuity, govDeduction
 */
-export function revisedNetGratuityCalculation(oldGrossGratuity : number, newGrossGratuity : number, govDeduction : number) {
+export function revisedNetGratuityCalculation(oldGrossGratuity: number, newGrossGratuity: number, govDeduction: number) {
     let netGratuity = newGrossGratuity - (oldGrossGratuity + +govDeduction);
     return netGratuity;
 }
@@ -76,7 +76,7 @@ export function revisedNetGratuityCalculation(oldGrossGratuity : number, newGros
 * calculate total service period
 * @param trainedPeriod, wnodDeductionPeriod, pensionablePeriod
 */
-export function netServicePeriodCalculation(trainedPeriod : Duration, wnodDeductionPeriod : Duration, pensionablePeriod : Duration){
+export function netServicePeriodCalculation(trainedPeriod: Duration, wnodDeductionPeriod: Duration, pensionablePeriod: Duration) {
     var trainedYY = trainedPeriod.years;
     var trainedMM = trainedPeriod.months;
     var trainedDD = trainedPeriod.days;
@@ -107,7 +107,7 @@ export function netServicePeriodCalculation(trainedPeriod : Duration, wnodDeduct
 * calculate net no pay leaves
 * @ param noPayLeaves, noPaySetoff
 */
-export function netNoPayLeaveCalculation (noPayLeave : Duration, noPaySetOff : Duration){
+export function netNoPayLeaveCalculation(noPayLeave: Duration, noPaySetOff: Duration) {
     var noPayYY = noPayLeave.years;
     var noPayMM = noPayLeave.months;
     var noPayDD = noPayLeave.days;
@@ -133,7 +133,7 @@ export function netNoPayLeaveCalculation (noPayLeave : Duration, noPaySetOff : D
 * calculate total nopay set off
 * @param governmentSetOff, foreignSetOff, governmentSetOffMore
 */
-export function netNoPaySetOffCalculation(governmentSetOff : Duration, foreignSetOff : Duration, governmentSetOffMore : Duration){
+export function netNoPaySetOffCalculation(governmentSetOff: Duration, foreignSetOff: Duration, governmentSetOffMore: Duration) {
     var governmentSetOffYY = governmentSetOff.years;
     var governmentSetOffMM = governmentSetOff.months;
     var governmentSetOffDD = governmentSetOff.days;
@@ -161,6 +161,35 @@ export function netNoPaySetOffCalculation(governmentSetOff : Duration, foreignSe
 }
 
 /*
+* calculate reduce no pay amount
+* @param servicePeriod
+*/
+export function reduceNoPayCalculation(servicePeriod: Duration) {
+    var reduceNoPay = new Duration();
+
+    if (servicePeriod.years >= 30) {
+        var serviceYY = servicePeriod.years;
+        var serviceMM = servicePeriod.months;
+        var serviceDD = servicePeriod.days;
+
+        var serviceDays = (serviceYY * 12 * 30) + +(serviceMM * 30) + +serviceDD;
+        //30 years = 10800 days
+        var constantDays = 10800;
+
+        var reduceDays = serviceDays - constantDays;
+
+        reduceNoPay.years = Math.floor(reduceDays / 360);
+        reduceNoPay.months = Math.floor((reduceDays % 360) / 30);
+        reduceNoPay.days = Math.floor((reduceDays % 360) % 30);
+
+        return reduceNoPay;
+    }
+    else {
+        return reduceNoPay;
+    }
+}
+
+/*
 * calculate deductable percentage 1% for every 6 months
 * @param serviceYears, serviceMonths
 */
@@ -183,6 +212,15 @@ export function deductablePercentageCalculation(serviceYears: number, serviceMon
 }
 
 /*
+* calculate deductable percentage of no pay
+* @param netNoPay
+*/
+export function noPayDeductablePercentageCalculation(netNoPay : Duration){
+    let noPayPercentage = ((netNoPay.years * 12) + +netNoPay.months) * 0.2;
+    return noPayPercentage;
+}
+
+/*
 * calculate net percentage after deduct
 * @param percentage, deductablePercentage, noPayPercentage
 */
@@ -193,9 +231,9 @@ export function netPercentageCalculation(percentage: number, deductablePercentag
 }
 
 class Duration {
-     years;
-     months;
-     days;
+    years;
+    months;
+    days;
 
     constructor() {
         this.years = 0;
