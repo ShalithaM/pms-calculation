@@ -6,6 +6,9 @@ import service from './src/service/service';
 * @param type, years, months,circular, salary
 */
 export function getPrecentage(type: string, years: number, months: number, circular: string, salary: number) {
+	if(circular == "2015-1"){
+		circular = "2015";
+	}
     var presentageObject = service.presentages.getPresentages(type, years, months, circular, salary);
     return presentageObject;
 }
@@ -15,6 +18,9 @@ export function getPrecentage(type: string, years: number, months: number, circu
 * @parms scale, grade, circular, salary, retired_date, increment_date
 */
 export function get2020Salary(scale: string, grade: string, circular: string, salary: number, retired_date: string, increment_date: string) {
+	if(circular == "2015-1"){
+		circular = "2015";
+	}
     var salaryObject = service.salary2020.get2020Salary(scale, grade, circular, salary, retired_date, increment_date)
     return salaryObject;
 }
