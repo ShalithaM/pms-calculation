@@ -24,7 +24,7 @@ class Services {
       this.axios
         .get(path, { params: data })
         .then(result => resolve(result.data))
-        .catch(err => reject(err));
+        .catch(err =>resolve(null));
     });
   }
 
@@ -37,9 +37,7 @@ class Services {
       .then(function (response) {
         callback(response.data, null);
       })
-      .catch(function (error) {
-        callback(null, error);
-      });
+      
   }
 
   // setHeader() {

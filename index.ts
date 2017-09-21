@@ -236,6 +236,35 @@ export function netPercentageCalculation(percentage: number, deductablePercentag
 
 }
 
+/*
+* calculate revision arrears
+* @ param newBasic, oldBasic,effectDate,processDate
+*/
+export function revisionArrears (newBasic:number, oldBasic: number , effectDate: Date , toDate:Date ){
+ 
+   // var newBasic = 25549.84;
+   // var oldBasic = 24979.83;
+   
+   // var effectDate      = new Date("2011-01-01");
+   // var toDate		    = new Date("2017-07-31");
+    
+    //calculate months for pay arrears
+    var yearsDifference =toDate.getFullYear()-effectDate.getFullYear();
+    var monthsDifference=toDate.getMonth()-effectDate.getMonth();    
+   	var arrearsMonths   = (monthsDifference-1)+(yearsDifference*12);
+    
+
+     //calculate dates for pay arrears
+    var totalDatesOfEffMonth    =new Date(effectDate.getFullYear(), effectDate.getMonth()+1, 0).getDate();
+    var arrearsDatesOfEffectdate=totalDatesOfEffMonth-effectDate.getDate()+1;
+    var totalDatesOfToMonth     =new Date(toDate.getFullYear(), toDate.getMonth()+1, 0).getDate();
+    var arrearsDatesOfToDate    =toDate.getDate();
+
+    //calculate total arrears (total arrears for full months + arrears for remain dates in effective months + arrears for remain dates in process months )
+    var totalArrears= ((newBasic-oldBasic)*arrearsMonths)+((newBasic-oldBasic)*(arrearsDatesOfEffectdate/totalDatesOfEffMonth))+((newBasic-oldBasic)*(arrearsDatesOfToDate/totalDatesOfToMonth));
+    return totalArrears;
+}
+
 class Duration {
     years;
     months;
