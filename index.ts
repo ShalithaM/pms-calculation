@@ -14,6 +14,14 @@ export function getPrecentage(type: string, years: number, months: number, circu
 }
 
 /*
+* get reduced unredeced precentages for military
+* @param type, years, months,circular, salary
+*/
+export function getPrecentageforMilitary(type: string, years: number, months: number, circular: string, salary: number, offeredto:string) {
+    var presentageObject = service.presentages.getPresentagesForMilitary(type, years, months, circular, salary, offeredto);
+    return presentageObject;
+}
+/*
 * get 2020 salary and increment values
 * @parms scale, grade, circular, salary, retired_date, increment_date
 */
