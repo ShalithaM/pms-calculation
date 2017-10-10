@@ -226,6 +226,30 @@ export function deductablePercentageCalculation(serviceYears: number, serviceMon
 }
 
 /*
+* calculate deductable percentage 1% for every 6 months for judge
+* @param serviceYears, serviceMonths, designation value
+* 14 = High court judge
+* 15 = Other judicial officers
+*/
+export function deductablePercentageForJudge(serviceYears: number, serviceMonths: number, designationValue: number) {
+    let deductablePercentage = 0;
+
+    if (serviceYears < designationValue) {
+
+        if (serviceMonths < 6) {
+            deductablePercentage = (designationValue - serviceYears) * 2;
+        }
+        else {
+            deductablePercentage = (designationValue - (serviceYears + +0.5)) * 2;
+        }
+        return deductablePercentage;
+    }
+    else {
+        return deductablePercentage;
+    }
+}
+
+/*
 * calculate deductable percentage of no pay
 * @param netNoPay
 */
