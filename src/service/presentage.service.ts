@@ -7,7 +7,7 @@ export default class Presentages {
     }
     getPresentages(type: string, years: number, months: number, circular: string, salary: number) {
         return new Promise((resolve, reject) => {
-            Service.get(this.subPath, { type: type, years: years, months: months, circular: circular, salary: salary * 12 })
+            Service.get(this.subPath, { type: type, years: years, months: months, circular: circular, salary: salary * 12, offeredto:"_"})
                 .then(result => {
                     if (result == null) {
                         resolve(null)
