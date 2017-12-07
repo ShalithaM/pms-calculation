@@ -297,6 +297,152 @@ export function revisionArrears (newBasic:number, oldBasic: number , effectDate:
     return totalArrears;
 }
 
+/*
+* calculate pension arrears
+* @ param basicSalary, retiredDate ,processDate
+*/
+export function pensionArrears (reducedSalary : number,  retiredDate : Date , proceDate : Date ){
+    //var reducedSalary=25000;
+    var data = {
+            "circularDates": [{
+            "index":1,
+            "startDate": "2006-01-02",
+            "endDate": "2014-10-31",
+            "cla":3525,
+            "ota":0,
+            "months":105,
+            "days":1/30
+
+        }, {
+            "index":2,
+            "startDate": "2014-11-01",
+            "endDate": "2015-03-31",
+            "cla":3525,
+            "ota":2500,
+            "months":5,
+            "days":0
+        }, {
+            "index":3,
+            "startDate": "2015-04-01",
+            "endDate": "2016-01-01",
+            "cla":3525,
+            "ota":3500,
+            "months":09,
+            "days":1/31
+        }, {
+            "index":4,
+            "startDate": "2016-01-02",
+            "endDate": "2020-01-01",
+            "cla":3525,
+            "ota":0,
+            "months":59,
+            "days":30/31
+
+        }]
+    }
+
+var periodArray = data.circularDates;
+//var retDate = new Date("2015-03-30");
+//var retiredDate =retDate.toISOString().substring(0, 10);
+//var proceDate=new Date("2017-08-31");
+//var proceDate =proceDate.toISOString().substring(0, 10);
+var effectIndex    =0;
+var arrearsOfEffectedSection=0;
+var arrearsOfFullsection=0;
+var arrearsOfLastSection=0;
+
+for (i = 0; i < periodArray.length ; i++) {
+    var obj = periodArray[i]
+    //calculate arrears for section in retired date
+    if (retiredDate >= obj.startDate && retiredDate <= obj.endDate){
+        var effectIndex    =obj.index;
+        var effectCla      =obj.cla;
+        var effectOta      =obj.ota;
+
+        var arrPrePart=prePartOfSection(retiredDate,obj.cla,obj.ota,reducedSalary);
+         
+        if(i==periodArray.length-1){
+            var arrmiddlePart=middlePartOfSection(retiredDate,proceDate,obj.cla,obj.ota,reducedSalary);
+            var arrPostPart=postPartOfSection(proceDate,obj.cla,obj.ota,reducedSalary);
+
+        }else{
+            var arrmiddlePart=middlePartOfSection(retiredDate,obj.endDate,obj.cla,obj.ota,reducedSalary);
+            var arrPostPart=postPartOfSection(obj.endDate,obj.cla,obj.ota,reducedSalary);
+        }
+
+        arrearsOfEffectedSection =arrPrePart+arrmiddlePart+arrPostPart; 
+    }
+
+    //calculate arrears for  sections after effected  retired date in section
+    if (effectIndex<obj.index && effectIndex>0 ){
+        if (retiredDate <'2016-01-02' && obj.index >3 ){ 
+            var cla=3525;
+            var ota=3500;
+        }else{
+            var cla=obj.cla;
+            var ota=obj.ota;
+        }
+
+        if (proceDate > obj.startDate && proceDate < obj.endDate){
+            var arrPrePart  =prePartOfSection(obj.startDate,cla,ota,reducedSalary);
+            var arrmiddlePart=middlePartOfSection(obj.startDate,proceDate,cla,ota,reducedSalary);
+            var arrPostPart  =postPartOfSection(proceDate,cla,ota,reducedSalary);
+            var arrearsOfLastSection=arrPrePart+arrmiddlePart+arrPostPart;
+        }else{
+            var arrearsOfFullsection=(cla+ota+reducedSalary)*(obj.months+obj.days);
+        }       
+    }
+
+}
+//console.log("efected"+arrearsOfEffectedSection);
+//console.log("full"+arrearsOfFullsection);
+//console.log("last"+arrearsOfLastSection);
+//calculate total arrears 
+var totalArrears=    arrearsOfEffectedSection+arrearsOfFullsection+arrearsOfLastSection;
+//console.log("total"+totalArrears) ;
+    
+}
+
+
+/*
+* calculate pension arrears for pre part of a section
+* @ param basicSalary, cla , ota , startDate
+*/
+function prePartOfSection(startdate,cla,ota,redsalary){
+    var startdate = new Date(startdate);
+    var totalDatesOfStartMonth    =new Date(startdate.getFullYear(), startdate.getMonth()+1, 0).getDate();
+    var calDatesOfStartMonth=totalDatesOfStartMonth-startdate.getDate()+1;
+    var arrears =(redsalary+cla+ota)*(calDatesOfStartMonth/totalDatesOfStartMonth);
+    return arrears;
+}
+
+/*
+* calculate pension arrears for middle part of a section
+* @ param basicSalary, cla , ota , startDate,enddate
+*/
+function middlePartOfSection(startdate,enddate,cla,ota,redsalary){
+
+    var startdate = new Date(startdate);
+    var enddate = new Date(enddate);
+    var yearsDifference=enddate.getFullYear()-startdate.getFullYear();
+    var monthsDifference=enddate.getMonth()-startdate.getMonth();
+    //calculate months for pay arrears
+    var arrearsMonths   = (monthsDifference-1)+(yearsDifference*12);
+    var arrears =(redsalary+cla+ota)*arrearsMonths;
+    return arrears;
+}
+
+/*
+* calculate pension arrears for post part of a section
+* @ param basicSalary, cla , ota , enddate
+*/
+function postPartOfSection(enddate,cla,ota,redsalary){
+    var end = new Date(enddate);
+    var totalDatesOfEndMonth    =new Date(end.getFullYear(), end.getMonth()+1, 0).getDate();
+    var calDatesOfEndMonth=end.getDate();
+    var arrears =(redsalary+cla+ota)*(calDatesOfEndMonth/totalDatesOfEndMonth);
+    return arrears;
+}
 class Duration {
     years;
     months;
